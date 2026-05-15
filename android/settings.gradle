@@ -1,5 +1,10 @@
 pluginManagement {
     includeBuild("../node_modules/@react-native/gradle-plugin")
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
 
 plugins {
@@ -13,4 +18,23 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 rootProject.name = 'MarkerDetector'
 
 include ':app'
-includeBuild('../node_modules/@react-native/gradle-plugin')
+
+include ':react-native-vision-camera'
+project(':react-native-vision-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vision-camera/android')
+
+// @shopify/react-native-skia is handled by autolinking as ':shopify_react-native-skia'
+// Do NOT add a manual include here or it will create a duplicate project pointing
+// to the same source dir, causing Gradle 8.8 implicit dependency errors.
+
+include ':react-native-reanimated'
+project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
+
+include ':react-native-safe-area-context'
+project(':react-native-safe-area-context').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-safe-area-context/android')
+
+include ':react-native-screens'
+project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screens/android')
+
+include ':react-native-vector-icons'
+project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
+

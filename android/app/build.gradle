@@ -91,6 +91,11 @@ android {
     buildFeatures {
         prefab true
     }
+
+    packagingOptions {
+        pickFirst "**/libc++_shared.so"
+        pickFirst "**/libfbjni.so"
+    }
 }
 
 dependencies {
@@ -100,6 +105,14 @@ dependencies {
 
     // OpenCV Maven dependency (v4.9.0 supports Android natively)
     implementation 'org.opencv:opencv:4.9.0'
+
+    // Vision Camera must be explicit so Kotlin can resolve its classes at compile time
+    implementation project(':react-native-vision-camera')
+    implementation project(':shopify_react-native-skia')
+    implementation project(':react-native-reanimated')
+    implementation project(':react-native-safe-area-context')
+    implementation project(':react-native-screens')
+    implementation project(':react-native-vector-icons')
 }
 
 

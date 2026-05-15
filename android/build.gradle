@@ -16,9 +16,26 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.2.2")
-        classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     }
 }
 
-apply plugin: "com.facebook.react.rootproject"
+plugins {
+    id("com.facebook.react.rootproject")
+}
+
+subprojects {
+    // Debug: println("Project path: ${project.path}")
+    tasks.whenTaskAdded { task ->
+        if (project.path.contains("skia")) {
+            if (task.name.contains("merge") && task.name.contains("NativeLibs")) {
+                // Link to ANY buildCMake or mergeJni tasks in ANY project containing "skia"
+                // to resolve cross-project dependency issues caused by autolinking naming mismatches.
+                task.dependsOn(rootProject.subprojects.findAll { it.path.contains("skia") }.collect { it.tasks.matching { it.name.contains("buildCMake") || it.name.contains("mergeDebugJniLibFolders") } })
+            }
+            if (task.name.contains("prefab") && task.name.contains("ConfigurePackage")) {
+                task.dependsOn(rootProject.subprojects.findAll { it.path.contains("skia") }.collect { it.tasks.matching { it.name.contains("prepareHeaders") } })
+            }
+        }
+    }
+}
